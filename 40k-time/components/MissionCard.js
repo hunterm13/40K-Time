@@ -27,7 +27,8 @@ const MissionCard = ({vp, scoreVp, setIsOpen, isOpen, togglePopup, secondary, di
 
     return (
       <Box sx={{ textAlign: 'center', mt: 4, position: 'relative' }}>
-        <Popup open={isOpen} modal nested>
+        <Popup open={isOpen} modal onClose={() => setIsOpen(false)} nested>
+          {close => (
           <Box bgcolor="#363636" sx={{ p: 2, textAlign: 'center' }} onClick={(e) => e.stopPropagation()}>
             <Typography variant="h6" style={{ whiteSpace: "pre-line" }}>
               {secondaries[secondary[1]] ? secondaries[secondary[1]][0] : null}
@@ -53,6 +54,7 @@ const MissionCard = ({vp, scoreVp, setIsOpen, isOpen, togglePopup, secondary, di
               </Box>
             </Popup>
           </Box>
+          )}
         </Popup>
       </Box>
     );
