@@ -28,8 +28,7 @@ const MissionCardMobile = ({vp, scoreVp, setIsOpen, isOpen, togglePopup, seconda
 
     return (
         <Box sx={{ textAlign: 'center', mt: 4}}>
-          <Popup open={isOpen} onClose={() => setIsOpen(false)} contentStyle={{ width: '80%', maxHeight:"80vh", overflow: 'auto', border:"5px solid white", padding:"0" }}>
-            {close => (
+          <Popup modal nested open={isOpen} onClose={() => setIsOpen(false)} contentStyle={{ width: '80%', maxHeight:"80vh", overflow: 'auto', border:"5px solid white", padding:"0" }}>
               <Box
                 bgcolor="#363636"
                 sx={{p: 1}}
@@ -53,8 +52,8 @@ const MissionCardMobile = ({vp, scoreVp, setIsOpen, isOpen, togglePopup, seconda
                 <Typography sx={{ m: 2 }} style={{ whiteSpace: "pre-line" }}>
                   {secondaries[secondary[1]] ? secondaries[secondary[1]][1] : null}
                 </Typography>
-                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-                    <Popup trigger={<Button variant="contained">Score this Secondary</Button>} position="top center">
+                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }} >
+                    <Popup nested trigger={<Button variant="contained">Score this Secondary</Button>} position="top center">
                         <Box bgcolor="#363636" sx={{ p: 2, textAlign: 'center' }} onClick={(e) => e.stopPropagation()}>
                         <Typography variant="h6">Points Scored: {newVp}</Typography>
                         <Typography>Current VP: {vp}</Typography>
@@ -74,7 +73,6 @@ const MissionCardMobile = ({vp, scoreVp, setIsOpen, isOpen, togglePopup, seconda
                     </Button>
                 </Box>
               </Box>
-            )}
           </Popup>
         </Box>
       );
