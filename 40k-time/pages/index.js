@@ -3,6 +3,7 @@ import { act, useEffect, useState } from "react";
 import { Grid, Typography, Container, Button } from "@mui/material";
 import MissionCard from "../components/MissionCard";
 import Popup from "reactjs-popup";
+import MissionCardMobile from "../components/MissionCardMobile";
 
 export default function Home() {
   
@@ -17,7 +18,21 @@ export default function Home() {
   const [defenderVp, setDefenderVp] = useState(0)
   const [vp, setVp] = useState()
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenMobile, setIsOpenMobile] = useState(false);
   const [activeSecondary, setActiveSecondary] = useState([]);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   let tempActiveSecondary = [];
 
   const getRandomNumber = () => {
@@ -72,6 +87,25 @@ export default function Home() {
     setDefenderVp(0);
   }
 
+  const handleButtonClick = (type, card) => {
+    if (isMobile) {
+      openPopupMobile(type, card);
+    } else {
+      openPopup(type, card);
+    }
+  };
+
+  const openPopupMobile = (player, newCard) => {
+    tempActiveSecondary = [player, newCard];
+    setActiveSecondary(tempActiveSecondary)
+    if(player == "attacker"){
+      setVp(attackerVp)
+    } else {
+      setVp(defenderVp)
+    }
+    togglePopup();
+  } 
+
   const openPopup = (player, newCard) => {
     tempActiveSecondary = [player, newCard];
     setActiveSecondary(tempActiveSecondary)
@@ -115,7 +149,7 @@ export default function Home() {
             <Grid container spacing={1} direction="column" alignItems="center">
               {attackerSecondaries.map((card, index) => (
                 <Grid item key={index}>
-                  <Button variant="contained" color="secondary" onClick={() => openPopup("attacker", card)}>
+                  <Button variant="contained" color="secondary" onClick={() => handleButtonClick("attacker", card)}>
                     {secondaryNames[card]}
                   </Button>
                 </Grid>
@@ -127,7 +161,7 @@ export default function Home() {
             <Grid container spacing={1} direction="column" alignItems="center">
               {defenderSecondaries.map((card, index) => (
                 <Grid item key={index}>
-                  <Button variant="contained" color="secondary" onClick={() => openPopup("defender", card)}>
+                  <Button variant="contained" color="secondary" onClick={() => handleButtonClick("defender", card)}>
                     {secondaryNames[card]}
                   </Button>
                 </Grid>
@@ -162,6 +196,15 @@ export default function Home() {
         </Grid> 
       </Container>
       <MissionCard
+        vp = {vp}
+        scoreVp={scoreVp}
+        setIsOpen={setIsOpenMobile}
+        isOpen={isOpenMobile} 
+        togglePopup={togglePopup}
+        secondary={activeSecondary}
+        discardCard={discardCard}
+      />
+      <MissionCardMobile
         vp = {vp}
         scoreVp={scoreVp}
         setIsOpen={setIsOpen}
